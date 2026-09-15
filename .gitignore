@@ -1,0 +1,28 @@
+# ---- 运行期数据：里面有登录凭据，千万别提交 ----
+.browser_profile/
+.login_cookies.json
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- 打包产物与构建缓存 ----
+dist/
+build/
+_build/
+*.spec
+
+# ---- 可选：随项目带的 selenium 副本（改用 pip install selenium 时可忽略）----
+_libs/
+
+# ---- 日志 / 编辑器 / 系统文件 ----
+*.log
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+desktop.ini
