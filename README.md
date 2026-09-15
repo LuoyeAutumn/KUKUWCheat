@@ -6,6 +6,10 @@
 > ⚠️ **仅供学习交流**。项目用于练习 Selenium 浏览器自动化、tkinter 界面、打包发布等工程技能。
 > 在目标站点上自动打字/提交成绩可能违反其站点规则，**一切后果由使用者自行承担**，详见文末[免责声明](#免责声明)。
 
+**下载**：[最新版本](https://github.com/LuoyeAutumn/KUKUWCheat/releases/latest) ——
+安装版 `KUKUWCheat_Setup.exe`（推荐）或 单文件版 `KUKUWCheat.exe`，双击即用，**不需要装 Python**。
+想从源码跑或自己打包，见[快速开始](#快速开始)与[打包成 exe](#打包成-exe)。
+
 ---
 
 ## 功能特性
@@ -24,7 +28,7 @@
 - **暂停 / 停止**：可以只停出字（网页倒计时继续走），也可以连网页测试一起暂停；
   中途停止会自动按停网页测试，避免时间到了自动交一份低分
 - **测试类型**：中文打字 / 英文打字 / 竞赛 / 竞赛(邀请码)
-- **可打包**：文件夹版 / 单文件版 exe + 安装程序（默认安装到 `C:\Program Files (x86)\KUKUWCheat`，可自定义路径）
+- **可打包发布**：一条命令打成 Windows exe（单文件版 / 文件夹版）和安装程序（默认装到 `C:\Program Files (x86)\KUKUWCheat`，路径可改，带卸载）
 
 ---
 
@@ -33,18 +37,30 @@
 | 项目 | 要求 |
 | --- | --- |
 | 系统 | Windows 10 / 11（依赖系统自带 Edge 浏览器） |
-| Python | 3.9+（开发环境为 3.14） |
+| Python | 3.9+（开发与打包环境为 3.14）——**只跑 exe 的话不需要** |
 | 依赖 | `selenium`（`pip install selenium`）；`tkinter` 为 Python 自带 |
 | 驱动 | 无需手动装：首次运行由 Selenium Manager 自动下载匹配版本的 Edge 驱动（需联网） |
 
-> 仓库不提交 `_libs/`（本机离线用的 selenium 副本）。如果你手上的目录里有 `_libs/`，代码会优先用它，
-> 此时不用 `pip install selenium` 也能跑。
+> 仓库里只有源码。源码运行需要 `pip install selenium`；`_libs/` 是给离线环境随包携带的 selenium 副本，
+> 已在 `.gitignore` 中（如果你本地有，代码会优先用它，此时可以不装 selenium）。
 
 ---
 
 ## 快速开始
 
-### 方式一：源码运行（推荐先试）
+### 方式一：下载预编译版（不用装 Python）
+
+到 [Releases](https://github.com/LuoyeAutumn/KUKUWCheat/releases/latest) 下载：
+
+| 文件 | 适合 | 说明 |
+| --- | --- | --- |
+| `KUKUWCheat_Setup.exe` | 推荐 | 安装版：默认装到 `C:\Program Files (x86)\KUKUWCheat`，可自定义路径，建开始菜单/桌面快捷方式，可在"应用和功能"里卸载 |
+| `KUKUWCheat.exe` | 便携 | 单文件版：双击即用，不写注册表、不动开始菜单；启动比安装版慢 1~3 秒（每次要解包），登录缓存在 exe 旁边 |
+
+> 如果 Windows 弹出"Windows 已保护你的电脑"（SmartScreen），那是 PyInstaller 打包 exe 的常见误报：
+> 点"更多信息 → 仍要运行"，或把文件加到杀软白名单。
+
+### 方式二：源码运行
 
 ```bash
 pip install selenium
@@ -54,20 +70,20 @@ python kukuwcheat_gui.py --console  # 想保留命令行窗口看输出时用这
 
 双击 `kukuwcheat_gui.py` 也可以：程序会自己用 `pythonw.exe` 重启一遍，不留命令行黑窗口。
 
-### 方式二：命令行版（不带界面）
+### 方式三：命令行版（不带界面）
 
 ```bash
 python kukuwcheat_auto.py --help
 python kukuwcheat_auto.py --type cn --interval 0.3 --jitter 0.1
 ```
 
-### 方式三：exe / 安装包
+### 第一次使用（三种方式都一样）
 
-| 文件 | 说明 |
-| --- | --- |
-| `KUKUWCheat_Setup.exe` | 安装程序：默认装到 `C:\Program Files (x86)\KUKUWCheat`，可改路径，建开始菜单/桌面快捷方式，带卸载 |
-| `dist\portable\KUKUWCheat\KUKUWCheat.exe` | 文件夹版：整个目录拷到哪都能用 |
-| `dist\single\KUKUWCheat.exe` | 单文件版：启动稍慢（每次要解包），胜在只有一个文件 |
+1. 打开后是**游客身份**，成绩不会计入账号
+2. 填账号密码点【登录】，或点【微信扫码登录】（扫码需要能看到浏览器窗口）
+3. 登录状态会缓存到本地，下次启动自动恢复；**程序不保存密码**
+
+缓存在哪、怎么迁移或清理，见[登录与缓存位置](#登录与缓存位置)。
 
 ---
 
@@ -121,8 +137,8 @@ python kukuwcheat_auto.py --type cn --interval 0.3 --jitter 0.1
 
 | 用法 | 缓存位置 |
 | --- | --- |
-| 单文件版 / 文件夹版放在可写目录 | `<exe 所在目录>\.browser_profile`、`.login_cookies.json` |
-| 装到 `C:\Program Files (x86)\KUKUWCheat`（普通用户不可写） | `%LOCALAPPDATA%\KUKUWCheat\` |
+| 单文件版（或自己打包的文件夹版）放在可写目录 | `<exe 所在目录>\.browser_profile`、`.login_cookies.json` |
+| 安装版装到 `C:\Program Files (x86)\KUKUWCheat`（普通用户不可写） | `%LOCALAPPDATA%\KUKUWCheat\` |
 
 > 卸载只删程序目录，`%LOCALAPPDATA%\KUKUWCheat` 会保留，重装不用重新登录。
 > `.browser_profile` 会随使用慢慢变大（几百 MB 级），想回收直接删掉即可（会掉登录）。
@@ -163,20 +179,26 @@ python -m PyInstaller --noconfirm --onedir --noconsole --name KUKUWCheat ^
   --hidden-import selenium.webdriver.chrome.service ^
   --distpath dist\portable kukuwcheat_gui.py
 
-# 2) 单文件版（把 --onedir 换成 --onefile，distpath 换 dist\single）
+# 2) 单文件版
 python -m PyInstaller --noconfirm --onefile --noconsole --name KUKUWCheat ^
-  --collect-all selenium --hidden-import selenium.webdriver.edge.webdriver ^
-  --hidden-import selenium.webdriver.edge.options --hidden-import selenium.webdriver.edge.service ^
+  --collect-all selenium ^
+  --hidden-import selenium.webdriver.edge.webdriver ^
+  --hidden-import selenium.webdriver.edge.options ^
+  --hidden-import selenium.webdriver.edge.service ^
   --hidden-import selenium.webdriver.chrome.webdriver ^
   --hidden-import selenium.webdriver.chrome.options ^
   --hidden-import selenium.webdriver.chrome.service ^
   --distpath dist\single kukuwcheat_gui.py
 
-# 3) 安装程序（把文件夹版当包体塞进去）
+# 3) 安装程序（把上面第 1 步的文件夹版当包体塞进去）
 python -m PyInstaller --noconfirm --onefile --noconsole --name KUKUWCheat_Setup ^
   --add-data "dist\portable\KUKUWCheat;KUKUWCheat" ^
   --distpath dist kukuwcheat_setup.py
 ```
+
+> 产物都在 `dist/`，已在 `.gitignore` 里（不进仓库）。要发新版时把
+> `dist\KUKUWCheat_Setup.exe` 和 `dist\single\KUKUWCheat.exe` 作为 Release 资产上传即可：
+> 网页上拖拽，或 `gh release create v1.0.1 dist\KUKUWCheat_Setup.exe dist\single\KUKUWCheat.exe`。
 
 两个坑（都踩过）：
 
@@ -196,14 +218,24 @@ KUKUWCheat_Setup.exe /UNINSTALL /SILENT               :: 静默卸载
 
 ## 目录结构
 
+仓库里就这几个文件：
+
 ```
 KUKUWCheat/
-├─ kukuwcheat_auto.py     # 核心：开浏览器、选文章、逐字打字、登录、菜单/竞赛/时间选择（也是命令行版）
-├─ kukuwcheat_gui.py      # 图形界面（入口），实时镜像 + 参数联动 + 暂停/停止
-├─ kukuwcheat_setup.py    # 安装程序（安装/卸载二合一），打包成 KUKUWCheat_Setup.exe
-├─ _libs/                 # 可选：随项目带的 selenium 副本（不提交到仓库）
-├─ .browser_profile/      # 运行期：浏览器用户目录（登录状态，不提交）
-└─ .login_cookies.json    # 运行期：登录 cookie 备份（不提交）
+├─ README.md
+├─ LICENSE                   # MIT
+├─ .gitignore
+├─ kukuwcheat_auto.py        # 核心：开浏览器、选文章、逐字打字、登录、类型/竞赛/时间选择（也是命令行版）
+├─ kukuwcheat_gui.py         # 图形界面（入口）：实时镜像 + 参数联动 + 暂停/停止
+└─ kukuwcheat_setup.py       # 安装程序（安装/卸载二合一），打包成 KUKUWCheat_Setup.exe
+```
+
+运行/打包之后会多出这些（都写在 `.gitignore` 里，**不会进仓库**）：
+
+```
+.browser_profile/            # 浏览器用户目录，登录状态就在里面（几百 MB 级）
+.login_cookies.json          # 登录 cookie 备份
+dist/  _build/               # 打包产物与构建缓存
 ```
 
 ---
@@ -229,7 +261,7 @@ cookie 备份自动恢复；如果你把这个文件删了，重新登录一次�
 首次运行需要联网让 Selenium Manager 下载驱动；受限网络环境下可以手动放置 `msedgedriver.exe` 并指定路径。
 
 **Q：杀软/Defender 报毒？**
-PyInstaller 打出来的单文件 exe 被误报很常见。改用文件夹版，或把安装目录加白名单。
+PyInstaller 打出来的 exe 被误报很常见（单文件版尤其明显）。可以改用安装版，或把文件/安装目录加入白名单。
 
 ---
 
