@@ -34,7 +34,7 @@ from tkinter import filedialog, messagebox, ttk
 APP_DIR_NAME = 'KUKUWCheat'                     # 安装目录默认名
 DEFAULT_DIR = 'C:\\Program Files (x86)\\' + APP_DIR_NAME
 DISPLAY_NAME = 'KUKUWCheat'
-VERSION = '1.0'
+VERSION = '1.0.0'
 MAIN_EXE = 'KUKUWCheat.exe'
 UNINST_EXE = 'uninstall.exe'
 SHORTCUT_NAME = 'KUKUWCheat'
